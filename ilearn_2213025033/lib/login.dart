@@ -90,7 +90,7 @@ class LoginPage extends StatelessWidget {
             Center(
               child: GestureDetector(
                 onTap: () {
-                  // Logic for forgot password action
+                  // Logic for forgot password actionn
                 },
                 child: const Text(
                   'Forgot Password',
