@@ -1,29 +1,16 @@
 import 'package:flutter/material.dart';
+import 'login.dart'; // Importing the login page
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp((Key? key)) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: LoginPage(),
-    ); // MaterialApp
-  }
-}
-
-class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text("data"),
-      )
+      debugShowCheckedModeBanner: false,
+      home: LoginPage(), // Launching the login page
     );
   }
 }
