@@ -86,7 +86,7 @@ class LoginPage extends StatelessWidget {
             ),
             const SizedBox(height: 34),
 
-            // Forgot Password Linke
+            // Forgot Password Link
             Center(
               child: GestureDetector(
                 onTap: () {

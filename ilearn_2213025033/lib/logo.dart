@@ -8,7 +8,7 @@ class LogoWidget extends StatelessWidget {
     return Column(
       children: [
         Image.asset(
-          'assets/images/logo_ilearn.png', // Update the path to your logoo image
+          'assets/images/logo_ilearn.png', // Update the path to your logo image
           height: 100,
         ),
         const SizedBox(height: 10),
