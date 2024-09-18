@@ -5,21 +5,9 @@ class LogoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Image.asset(
-          'assets/images/logo_ilearn.png', // Update the path to your logo image
-          height: 100,
-        ),
-        const SizedBox(height: 10),
-        const Text(
-          'Student & Parent',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
+    return SizedBox(
+      height: 100,
+      child: Image.asset('assets/images/gambar_hal1.png'),
     );
   }
 }
