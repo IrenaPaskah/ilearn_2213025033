@@ -21,19 +21,22 @@ class LoginPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset('assets/images/gambar_hal1.png',
-                        height: 200), // Add your image here
+                        height: 212), // Add your image here
                     const SizedBox(height: 20),
                     const Text(
                       'No tasks yet.',
                       style: TextStyle(
-                          fontSize: 15,
-                          color: Color.fromRGBO(129, 120, 120, 1)),
+                        fontSize: 15,
+                        color: Color.fromRGBO(129, 120, 120, 1),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const Text(
                       'Tap "+" to start schedule planning',
                       style: TextStyle(
                           fontSize: 15,
-                          color: Color.fromRGBO(129, 120, 120, 1)),
+                          color: Color.fromRGBO(129, 120, 120, 1),
+                          fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -59,22 +62,22 @@ class LoginPage extends StatelessWidget {
 
   Widget _buildCalendarSection() {
     return Container(
-      decoration: BoxDecoration(
-        color: Colors.purple[200],
-        borderRadius: const BorderRadius.only(
+      decoration: const BoxDecoration(
+        color: Color.fromRGBO(195, 103, 175, 1),
+        borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(20),
           bottomRight: Radius.circular(20),
         ),
       ),
-      padding: const EdgeInsets.symmetric(vertical: 20),
+      padding: const EdgeInsets.symmetric(vertical: 30),
       child: Column(
         children: [
           const Text(
             'Today',
             style: TextStyle(
-              fontSize: 24,
+              fontSize: 30,
               fontWeight: FontWeight.bold,
-              color: Colors.black,
+              color: Color.fromRGBO(0, 0, 0, 1),
             ),
           ),
           const SizedBox(height: 10),
@@ -102,19 +105,24 @@ class LoginPage extends StatelessWidget {
   Widget _buildDay(String day, String date, {bool isSelected = false}) {
     return Column(
       children: [
-        Text(day, style: const TextStyle(color: Colors.black)),
+        Text(day, style: const TextStyle(color: Color.fromRGBO(0, 0, 0, 1))),
         const SizedBox(height: 5),
         Container(
           decoration: BoxDecoration(
-            color: isSelected ? Colors.purple : Colors.white,
+            color: isSelected
+                ? const Color.fromRGBO(171, 25, 140, 1)
+                : const Color.fromRGBO(255, 255, 255, 1),
             shape: BoxShape.circle,
-            border: Border.all(color: Colors.purple, width: 2),
+            border: Border.all(
+                color: const Color.fromRGBO(175, 25, 140, 1), width: 2),
           ),
           padding: const EdgeInsets.all(8),
           child: Text(
             date,
             style: TextStyle(
-              color: isSelected ? Colors.white : Colors.black,
+              color: isSelected
+                  ? const Color.fromRGBO(255, 255, 255, 1)
+                  : const Color.fromRGBO(0, 0, 0, 1),
               fontWeight: FontWeight.bold,
             ),
           ),
