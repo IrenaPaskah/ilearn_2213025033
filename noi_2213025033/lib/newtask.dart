@@ -41,7 +41,7 @@ class NewTaskPage extends StatelessWidget {
 
             // Ilustrasi gambar task
             Center(
-              child: Image.asset('assets/images/new_task.png',
+              child: Image.asset('assets/images/newtaskimage.png',
                   height: 100), // Gambar task icon
             ),
 
