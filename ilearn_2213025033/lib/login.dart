@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'newtask.dart';
+
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
@@ -48,8 +50,14 @@ class LoginPage extends StatelessWidget {
               alignment: Alignment.bottomCenter,
               child: FloatingActionButton(
                 onPressed: () {
-                  // Add task logic
+                  //Pindah ke halaman New Task saat tombol + dipencet
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const NewTaskPage()),
+                  );
                 },
+                // Add task logic
                 backgroundColor: const Color.fromRGBO(195, 103, 175, 1),
                 child: const Icon(Icons.add, size: 30),
               ),
