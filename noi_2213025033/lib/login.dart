@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'newtask.dart';
 
 class LoginPage extends StatelessWidget {
@@ -23,7 +22,7 @@ class LoginPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset('assets/images/gambar_hal1.png',
-                        height: 212), // Add your image here
+                        height: 800), // Add your image here
                     const SizedBox(height: 20),
                     const Text(
                       'No tasks yet.',

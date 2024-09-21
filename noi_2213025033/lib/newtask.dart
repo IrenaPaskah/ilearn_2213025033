@@ -7,10 +7,10 @@ class NewTaskPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.pink[100],
+        backgroundColor: const Color.fromRGBO(244, 203, 235, 1),
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.close, color: Colors.black),
+          icon: const Icon(Icons.close, color: Color.fromRGBO(0, 0, 0, 1)),
           onPressed: () {
             // Kembali ke halaman sebelumnya
             Navigator.pop(context);
@@ -24,8 +24,8 @@ class NewTaskPage extends StatelessWidget {
             child: const Text(
               'Create',
               style: TextStyle(
-                color: Colors.black,
-                fontSize: 16,
+                color: Color.fromRGBO(0, 0, 0, 1),
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -37,21 +37,21 @@ class NewTaskPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(height: 20),
+            const SizedBox(height: 50),
 
             // Ilustrasi gambar task
             Center(
               child: Image.asset('assets/images/newtaskimage.png',
-                  height: 100), // Gambar task icon
+                  height: 140), // Gambar task icon
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 40),
 
             // Teks "New Task"
             const Text(
               'New Task',
               style: TextStyle(
-                fontSize: 22,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -60,8 +60,8 @@ class NewTaskPage extends StatelessWidget {
             const Text(
               'Tap to rename',
               style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
+                fontSize: 12,
+                color: Color.fromRGBO(11, 11, 11, 0.511),
               ),
             ),
 
@@ -69,15 +69,15 @@ class NewTaskPage extends StatelessWidget {
 
             // Kotak "Today" dan "No Reminder"
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
+                color: const Color.fromRGBO(255, 255, 255, 1),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: const [
                   BoxShadow(
-                    color: Colors.grey.shade200,
-                    blurRadius: 8,
-                    spreadRadius: 2,
+                    color: Color.fromRGBO(238, 238, 238, 1),
+                    blurRadius: 2,
+                    spreadRadius: 1,
                   ),
                 ],
               ),
@@ -87,7 +87,7 @@ class NewTaskPage extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Today', style: TextStyle(fontSize: 18)),
+                      Text('Today', style: TextStyle(fontSize: 20)),
                       Icon(Icons.calendar_today, color: Colors.black),
                     ],
                   ),
@@ -96,8 +96,8 @@ class NewTaskPage extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('No reminder', style: TextStyle(fontSize: 18)),
-                      Icon(Icons.alarm, color: Colors.black),
+                      Text('No reminder', style: TextStyle(fontSize: 20)),
+                      Icon(Icons.alarm, color: Color.fromRGBO(0, 0, 0, 1)),
                     ],
                   ),
                 ],
@@ -106,7 +106,8 @@ class NewTaskPage extends StatelessWidget {
           ],
         ),
       ),
-      backgroundColor: Colors.pink[100], // Background warna pink muda
+      backgroundColor:
+          const Color.fromRGBO(244, 203, 235, 1), // Background warna pink muda
     );
   }
 }
