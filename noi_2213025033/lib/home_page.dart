@@ -14,6 +14,7 @@ class _HomePageState extends State<HomePage> {
   DateTime selectedDate = DateTime.now(); // Tanggal awal di-set ke hari ini
   final PageController _pageController = PageController(initialPage: 500);
   DateTime currentMonthYear = DateTime.now(); // Bulan dan tahun saat ini
+  List<Map<String, dynamic>> tasks = []; // Daftar tugas
 
   // Fungsi untuk mendapatkan tanggal minggu berdasarkan offset
   List<DateTime> getWeekDates(DateTime referenceDate, int offsetWeeks) {
@@ -43,6 +44,36 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  // Fungsi untuk menambahkan tugas baru
+  void _addTask(String taskName, DateTime date, TimeOfDay? time) {
+    setState(() {
+      tasks.add({
+        'name': taskName,
+        'date': date,
+        'time': time,
+      }); // Tambahkan tugas ke daftar
+      selectedDate = date; // Update tanggal yang dipilih
+      currentMonthYear = date; // Sinkronkan bulan & tahun
+    });
+  }
+
+  // Fungsi untuk memilih tanggal dari dialog date picker
+  Future<void> _selectDate() async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+        currentMonthYear =
+            picked; // Update bulan dan tahun sesuai tanggal yang dipilih
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,9 +82,13 @@ class _HomePageState extends State<HomePage> {
         elevation: 0,
         backgroundColor: const Color.fromRGBO(195, 103, 175, 1),
         centerTitle: true,
-        title: Text(
-          formatMonthYear(selectedDate), // Tampilkan "Today" atau bulan & tahun
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        title: GestureDetector(
+          onTap: _selectDate, // Memungkinkan pemilihan tanggal saat mengetuk
+          child: Text(
+            formatMonthYear(
+                currentMonthYear), // Tampilkan "Today" atau bulan & tahun
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
         ),
       ),
       body: Column(
@@ -122,25 +157,44 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           const SizedBox(height: 20),
+
+          // Bagian menampilkan tugas
           Expanded(
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Tambahkan Ilustrasi
-                  Image.asset(
-                    'assets/images/gambar_hal1.png', // Ganti dengan path gambar ilustrasi
-                    height: 200,
+            child: tasks.isEmpty
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/images/gambar_hal1.png', // Ganti dengan path gambar ilustrasi
+                          height: 200,
+                        ),
+                        const SizedBox(height: 20),
+                        const Text(
+                          "No tasks yet.\nTap '+' to start schedule planning",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 16, color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  )
+                : ListView.builder(
+                    itemCount: tasks.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(tasks[index]['name']),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () {
+                            setState(() {
+                              tasks.removeAt(
+                                  index); // Menghapus task dari daftar
+                            });
+                          },
+                        ),
+                      );
+                    },
                   ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    "No tasks yet.\nTap '+' to start schedule planning",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
-                  ),
-                ],
-              ),
-            ),
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 20.0),
@@ -151,8 +205,7 @@ class _HomePageState extends State<HomePage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => NewTaskPage(
-                            // ignore: avoid_types_as_parameter_names, non_constant_identifier_names
-                            onNewTask: (String, DateTime, TimeOfDay) {},
+                            onNewTask: _addTask,
                           )),
                 );
               },

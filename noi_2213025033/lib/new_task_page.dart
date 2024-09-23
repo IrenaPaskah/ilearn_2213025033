@@ -31,29 +31,27 @@ class _NewTaskPageState extends State<NewTaskPage> {
   }
 
   // Pemilihan tanggal pengingat
-  Future<void> _pickDate() async {
-    DateTime? pickedDate = await showDatePicker(
+  Future<void> _selectDate() async {
+    final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate,
       firstDate: DateTime.now(),
-      lastDate: DateTime(2100),
+      lastDate: DateTime(2101),
     );
-    if (pickedDate != null) {
+    if (picked != null && picked != selectedDate) {
       setState(() {
-        selectedDate = pickedDate;
+        selectedDate = picked;
       });
     }
   }
 
   // Pemilihan waktu pengingat
-  Future<void> _pickTime() async {
-    TimeOfDay? pickedTime = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
-    if (pickedTime != null) {
+  Future<void> _selectTime() async {
+    final TimeOfDay? picked =
+        await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    if (picked != null && picked != selectedTime) {
       setState(() {
-        selectedTime = pickedTime;
+        selectedTime = picked;
       });
     }
   }
@@ -63,7 +61,7 @@ class _NewTaskPageState extends State<NewTaskPage> {
     return Scaffold(
       backgroundColor: Colors.pink[100],
       appBar: AppBar(
-        backgroundColor: Colors.pink[100],
+        backgroundColor: const Color.fromRGBO(195, 103, 175, 1),
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.close),
@@ -88,32 +86,41 @@ class _NewTaskPageState extends State<NewTaskPage> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Ilustrasi gambar di bagian atas
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 20),
-              child: Image.asset(
-                'assets/images/newtaskimage.png', // Ganti dengan path gambar yang sesuai
-                height: 150,
+            // Ilustrasi gambar di bagian atas, dipindahkan ke tengah
+            Center(
+              child: Container(
+                margin: const EdgeInsets.symmetric(vertical: 20),
+                child: Image.asset(
+                  'assets/images/newtaskimage.png', // Ganti dengan path gambar yang sesuai
+                  height: 150,
+                ),
               ),
             ),
             // Input judul Task
+            const Text(
+              "Task Name",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
             TextField(
               controller: _taskController,
               decoration: const InputDecoration(
-                hintText: 'New Task (tap to rename)',
-                hintStyle: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                border: InputBorder.none,
+                hintText: 'Enter your task',
+                border: OutlineInputBorder(),
               ),
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               maxLength: 50, // Maksimal 50 karakter
-              textAlign: TextAlign.center, //posisi tengah
+              textAlign: TextAlign.center, // posisi tengah
             ),
-
             const SizedBox(height: 20),
             // Pilihan Tanggal Pengingat
+            const Text(
+              "Date",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
             GestureDetector(
-              onTap: _pickDate,
+              onTap: _selectDate,
               child: Container(
                 padding: const EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
@@ -124,9 +131,7 @@ class _NewTaskPageState extends State<NewTaskPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      selectedDate == DateTime.now()
-                          ? 'Today'
-                          : DateFormat.yMMMd().format(selectedDate),
+                      DateFormat.yMMMMd().format(selectedDate),
                       style: const TextStyle(fontSize: 18),
                     ),
                     const Icon(Icons.calendar_today),
@@ -136,8 +141,12 @@ class _NewTaskPageState extends State<NewTaskPage> {
             ),
             const SizedBox(height: 10),
             // Pilihan Waktu Pengingat
+            const Text(
+              "Time",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
             GestureDetector(
-              onTap: _pickTime,
+              onTap: _selectTime,
               child: Container(
                 padding: const EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
@@ -148,9 +157,9 @@ class _NewTaskPageState extends State<NewTaskPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      selectedTime == null
-                          ? 'No reminder'
-                          : selectedTime!.format(context),
+                      selectedTime != null
+                          ? selectedTime!.format(context)
+                          : 'No time selected',
                       style: const TextStyle(fontSize: 18),
                     ),
                     const Icon(Icons.access_time),
