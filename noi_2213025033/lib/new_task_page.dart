@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class NewTaskPage extends StatefulWidget {
-  const NewTaskPage({super.key});
+  final Function(String, DateTime, TimeOfDay?) onNewTask;
+
+  const NewTaskPage({super.key, required this.onNewTask});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -11,33 +13,47 @@ class NewTaskPage extends StatefulWidget {
 
 class _NewTaskPageState extends State<NewTaskPage> {
   final TextEditingController _taskController = TextEditingController();
-  DateTime _selectedDate = DateTime.now();
-  TimeOfDay _selectedTime = TimeOfDay.now();
-  String taskName = 'New Task';
-  int maxChars = 50;
+  DateTime selectedDate = DateTime.now(); // Tanggal pengingat
+  TimeOfDay? selectedTime; // Waktu pengingat
 
-  _selectDate() async {
-    final DateTime? pickedDate = await showDatePicker(
+  @override
+  void dispose() {
+    _taskController.dispose();
+    super.dispose();
+  }
+
+  // Menyimpan task baru
+  void _saveTask() {
+    if (_taskController.text.isNotEmpty) {
+      widget.onNewTask(_taskController.text, selectedDate, selectedTime);
+      Navigator.pop(context); // Kembali ke HomePage setelah menyimpan
+    }
+  }
+
+  // Pemilihan tanggal pengingat
+  Future<void> _pickDate() async {
+    DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: _selectedDate,
-      firstDate: DateTime(2000),
+      initialDate: selectedDate,
+      firstDate: DateTime.now(),
       lastDate: DateTime(2100),
     );
-    if (pickedDate != null && pickedDate != _selectedDate) {
+    if (pickedDate != null) {
       setState(() {
-        _selectedDate = pickedDate;
+        selectedDate = pickedDate;
       });
     }
   }
 
-  _selectTime() async {
-    final TimeOfDay? pickedTime = await showTimePicker(
+  // Pemilihan waktu pengingat
+  Future<void> _pickTime() async {
+    TimeOfDay? pickedTime = await showTimePicker(
       context: context,
-      initialTime: _selectedTime,
+      initialTime: TimeOfDay.now(),
     );
-    if (pickedTime != null && pickedTime != _selectedTime) {
+    if (pickedTime != null) {
       setState(() {
-        _selectedTime = pickedTime;
+        selectedTime = pickedTime;
       });
     }
   }
@@ -45,100 +61,102 @@ class _NewTaskPageState extends State<NewTaskPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.pink[100],
       appBar: AppBar(
-        title: const Text('Create'),
-        backgroundColor: Colors.pink[300],
+        backgroundColor: Colors.pink[100],
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: const Text('Create Task'),
+        actions: [
+          TextButton(
+            onPressed: _saveTask, // Simpan task ketika tombol "Create" diklik
+            child: const Text(
+              'Create',
+              style: TextStyle(
+                color: Color.fromARGB(255, 0, 0, 0),
+                fontSize: 18,
+              ),
+            ),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            GestureDetector(
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: const Text('Edit Task Name'),
-                      content: TextField(
-                        controller: _taskController,
-                        maxLength: maxChars,
-                        decoration:
-                            const InputDecoration(hintText: 'Enter task name'),
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            setState(() {
-                              taskName = _taskController.text.isEmpty
-                                  ? 'New Task'
-                                  : _taskController.text;
-                            });
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('Save'),
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-              child: Column(
-                children: [
-                  Text(
-                    taskName,
-                    style: const TextStyle(
-                        fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  const Text('Tap to rename'),
-                ],
+            // Ilustrasi gambar di bagian atas
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 20),
+              child: Image.asset(
+                'assets/images/newtaskimage.png', // Ganti dengan path gambar yang sesuai
+                height: 150,
               ),
             ),
+            // Input judul Task
+            TextField(
+              controller: _taskController,
+              decoration: const InputDecoration(
+                hintText: 'New Task (tap to rename)',
+                hintStyle: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                border: InputBorder.none,
+              ),
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              maxLength: 50, // Maksimal 50 karakter
+              textAlign: TextAlign.center, //posisi tengah
+            ),
+
             const SizedBox(height: 20),
+            // Pilihan Tanggal Pengingat
             GestureDetector(
-              onTap: _selectDate,
+              onTap: _pickDate,
               child: Container(
                 padding: const EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                        'Date: ${DateFormat('MMM d, yyyy').format(_selectedDate)}'),
+                      selectedDate == DateTime.now()
+                          ? 'Today'
+                          : DateFormat.yMMMd().format(selectedDate),
+                      style: const TextStyle(fontSize: 18),
+                    ),
                     const Icon(Icons.calendar_today),
                   ],
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
+            // Pilihan Waktu Pengingat
             GestureDetector(
-              onTap: _selectTime,
+              onTap: _pickTime,
               child: Container(
                 padding: const EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Reminder: ${_selectedTime.format(context)}'),
+                    Text(
+                      selectedTime == null
+                          ? 'No reminder'
+                          : selectedTime!.format(context),
+                      style: const TextStyle(fontSize: 18),
+                    ),
                     const Icon(Icons.access_time),
                   ],
                 ),
               ),
-            ),
-            const SizedBox(height: 40),
-            ElevatedButton(
-              onPressed: () {
-                final taskDetail =
-                    '$taskName at ${_selectedTime.format(context)} on ${DateFormat('MMM d, yyyy').format(_selectedDate)}';
-                Navigator.of(context).pop(taskDetail);
-              },
-              child: const Text('Save Task'),
             ),
           ],
         ),
