@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate,
-      firstDate: DateTime.now(),
+      firstDate: DateTime(2000),
       lastDate: DateTime(2100),
     );
     if (picked != null && picked != selectedDate) {
@@ -179,16 +179,31 @@ class _HomePageState extends State<HomePage> {
                     ),
                   )
                 : ListView.builder(
-                    itemCount: tasks.length,
+                    // Filter tugas berdasarkan tanggal yang dipilih
+                    itemCount: tasks.where((task) {
+                      DateTime taskDate = task['date'];
+                      return taskDate.day == selectedDate.day &&
+                          taskDate.month == selectedDate.month &&
+                          taskDate.year == selectedDate.year;
+                    }).length,
                     itemBuilder: (context, index) {
+                      // Ambil tugas yang sudah difilter
+                      var filteredTasks = tasks.where((task) {
+                        DateTime taskDate = task['date'];
+                        return taskDate.day == selectedDate.day &&
+                            taskDate.month == selectedDate.month &&
+                            taskDate.year == selectedDate.year;
+                      }).toList();
+
+                      // Tampilkan tugas berdasarkan index dari filteredTasks
                       return ListTile(
-                        title: Text(tasks[index]['name']),
+                        title: Text(filteredTasks[index]['name']),
                         trailing: IconButton(
                           icon: const Icon(Icons.delete),
                           onPressed: () {
                             setState(() {
-                              tasks.removeAt(
-                                  index); // Menghapus task dari daftar
+                              tasks.remove(filteredTasks[
+                                  index]); // Hapus task dari daftar
                             });
                           },
                         ),
