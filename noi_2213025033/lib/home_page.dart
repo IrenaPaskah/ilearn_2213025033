@@ -196,16 +196,49 @@ class _HomePageState extends State<HomePage> {
                       }).toList();
 
                       // Tampilkan tugas berdasarkan index dari filteredTasks
-                      return ListTile(
-                        title: Text(filteredTasks[index]['name']),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: () {
-                            setState(() {
-                              tasks.remove(filteredTasks[
-                                  index]); // Hapus task dari daftar
-                            });
-                          },
+                      return Card(
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 8.0, horizontal: 16.0),
+                        elevation: 3,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 16),
+                          title: Text(
+                            filteredTasks[index]['name'],
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromRGBO(171, 25, 140, 1),
+                            ),
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 5),
+                              Text(
+                                'Date: ${DateFormat.yMMMMd().format(filteredTasks[index]['date'])}',
+                                style: const TextStyle(color: Colors.black54),
+                              ),
+                              if (filteredTasks[index]['time'] != null)
+                                Text(
+                                  'Time: ${filteredTasks[index]['time'].format(context)}',
+                                  style: const TextStyle(color: Colors.black54),
+                                ),
+                            ],
+                          ),
+                          trailing: IconButton(
+                            icon: const Icon(Icons.delete,
+                                color: Colors.redAccent),
+                            onPressed: () {
+                              setState(() {
+                                tasks.remove(filteredTasks[
+                                    index]); // Hapus task dari daftar
+                              });
+                            },
+                          ),
                         ),
                       );
                     },
